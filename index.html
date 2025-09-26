@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Community - مجتمع الأنمي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF6B8B;
+            --secondary: #7B68EE;
+            --dark: #0F0F1E;
+            --dark-light: #1A1A2E;
+            --text: #FFFFFF;
+            --text-secondary: #B0B0C0;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #F44336;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--text);
+            direction: rtl;
+            overflow-x: hidden;
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* شاشة التسجيل/الدخول */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 20px;
+        }
+        
+        .auth-box {
+            background-color: var(--dark-light);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .auth-tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .auth-form input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-size: 16px;
+        }
+        
+        .auth-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .auth-form button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .auth-form button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .social-auth {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .facebook { background-color: #3b5998; }
+        .google { background-color: #db4437; }
+        .twitter { background-color: #1da1f2; }
+        
+        .social-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        /* الشريط الجانبي */
+        .sidebar {
+            width: 280px;
+            background-color: var(--dark-light);
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            border-left: 1px solid #333;
+            transition: transform 0.3s;
+            z-index: 100;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            color: var(--primary);
+            margin-left: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 22px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .user-panel {
+            padding: 20px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-left: 15px;
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .user-handle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            margin-bottom: 5px;
+        }
+        
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .menu-item a:hover, .menu-item a.active {
+            background: linear-gradient(to right, var(--primary), transparent);
+            color: white;
+        }
+        
+        .menu-item i {
+            margin-left: 10px;
+            font-size: 20px;
+        }
+        
+        .menu-badge {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-right: auto;
+        }
+        
+        /* المحتوى الرئيسي */
+        .main-content {
+            flex: 1;
+            margin-right: 280px;
+            transition: margin 0.3s;
+        }
+        
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: var(--dark-light);
+            border-bottom: 1px solid #333;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+        
+        .nav-title {
+            font-size: 22px;
+            font-weight: bold;
+        }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .search-box {
+            display: flex;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 10px 15px;
+            width: 300px;
+        }
+        
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            width: 100%;
+            outline: none;
+        }
+        
+        .notification-btn, .menu-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            background-color: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .content-area {
+            padding: 20px;
+        }
+        
+        /* منطقة إنشاء منشور */
+        .create-post {
+            background-color: var(--dark-light);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .post-form {
+            display: flex;
+        }
+        
+        .post-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-left: 15px;
+        }
+        
+        .post-input {
+            flex: 1;
+        }
+        
+        .post-input textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 16px;
+            resize: none;
+            height: 80px;
+            outline: none;
+        }
+        
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .post-options {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .post-option {
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .post-option:hover {
+            color: var(--primary);
+        }
+        
+        .post-submit {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        /* قائمة المنشورات */
+        .posts {
+            margin-top: 20px;
+        }
+        
+        .post {
+            background-color: var(--dark-light);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+            transition: transform 0.3s;
+        }
+        
+        .post:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .post-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        
+        .post-user-info {
+            flex: 1;
+        }
+        
+        .post-user-name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .post-user-handle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .post-time {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .post-content {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .post-media {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #333, #555);
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            overflow: hidden;
+        }
+        
+        .post-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            gap: 5px;
+        }
+        
+        .tag {
+            background: rgba(255, 107, 139, 0.2);
+            color: var(--primary);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+        
+        .post-stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .post-actions-bar {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #333;
+            padding-top: 15px;
+        }
+        
+        .post-action {
+            display: flex;
+            align-items: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .post-action:hover {
+            color: var(--primary);
+        }
+        
+        .post-action i {
+            margin-left: 5px;
+        }
+        
+        /* لوحة التحكم */
+        .admin-panel {
+            display: none;
+            background-color: var(--dark-light);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .admin-panel.active {
+            display: block;
+        }
+        
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--dark-light), #252540);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .admin-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .admin-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .admin-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* الشريط الجانبي الأيمن */
+        .right-sidebar {
+            width: 320px;
+            padding: 20px;
+        }
+        
+        .online-users, .trending-topics, .anime-news {
+            background-color: var(--dark-light);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+        }
+        
+        .section-title i {
+            margin-left: 8px;
+            color: var(--primary);
+        }
+        
+        .user-list, .topic-list, .news-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .online-user, .topic, .news-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .online-user:last-child, .topic:last-child, .news-item:last-child {
+            border-bottom: none;
+        }
+        
+        .online-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        
+        .online-user-name {
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .online-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--success);
+        }
+        
+        .topic-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .topic-count {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+        
+        .news-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .news-date {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+        
+        /* التكيف مع الشاشات الصغيرة */
+        @media (max-width: 1100px) {
+            .right-sidebar {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(100%);
+                width: 100%;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-right: 0;
+            }
+            
+            .top-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .nav-actions {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 10px;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+        }
+        
+        /* أنيميشن للعناصر */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .post {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* أنيميشن للنبض عند التحديث */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .updating {
+            animation: pulse 1s infinite;
+        }
+        
+        /* صفحة الملف الشخصي */
+        .profile-page {
+            display: none;
+        }
+        
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .profile-cover {
+            height: 200px;
+            background: linear-gradient(135deg, #333, #555);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-info {
+            display: flex;
+            align-items: flex-end;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin-left: 20px;
+            border: 5px solid var(--dark-light);
+        }
+        
+        .profile-details {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .profile-handle {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .profile-bio {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .profile-stats {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .profile-stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .profile-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .profile-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* صفحة الدردشة */
+        .chat-page {
+            display: none;
+        }
+        
+        .chat-container {
+            display: flex;
+            height: 80vh;
+            background-color: var(--dark-light);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .chat-sidebar {
+            width: 300px;
+            border-left: 1px solid #333;
+            overflow-y: auto;
+        }
+        
+        .chat-list {
+            padding: 15px;
+        }
+        
+        .chat-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .chat-item:hover, .chat-item.active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-left: 15px;
+        }
+        
+        .chat-info {
+            flex: 1;
+        }
+        
+        .chat-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .chat-preview {
+            color: var(--text-secondary);
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .chat-time {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+        
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .message {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .message.received {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-start;
+        }
+        
+        .message.sent {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            align-self: flex-end;
+            margin-right: 0;
+            margin-left: auto;
+        }
+        
+        .message-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-align: right;
+            margin-top: 5px;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #333;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 20px;
+            padding: 12px 20px;
+            color: var(--text);
+            outline: none;
+        }
+        
+        .chat-send {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        /* صفحة المجموعات */
+        .groups-page {
+            display: none;
+        }
+        
+        .groups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .group-card {
+            background-color: var(--dark-light);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .group-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .group-cover {
+            height: 150px;
+            background: linear-gradient(135deg, #333, #555);
+        }
+        
+        .group-info {
+            padding: 20px;
+        }
+        
+        .group-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .group-description {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .group-members {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .member-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            margin-left: -5px;
+            border: 2px solid var(--dark-light);
+        }
+        
+        .member-count {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        
+        .group-join {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        /* فتح وإغلاق القوائم */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- شاشة المصادقة -->
+    <div class="auth-container" id="authContainer">
+        <div class="auth-box">
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchAuthTab('login')">تسجيل الدخول</div>
+                <div class="auth-tab" onclick="switchAuthTab('register')">إنشاء حساب</div>
+            </div>
+            
+            <form class="auth-form active" id="loginForm">
+                <input type="text" placeholder="البريد الإلكتروني أو رقم الهاتف">
+                <input type="password" placeholder="كلمة المرور">
+                <button type="button" onclick="login()">تسجيل الدخول</button>
+                
+                <div class="social-auth">
+                    <div class="social-btn facebook"><i class="fab fa-facebook-f"></i></div>
+                    <div class="social-btn google"><i class="fab fa-google"></i></div>
+                    <div class="social-btn twitter"><i class="fab fa-twitter"></i></div>
+                </div>
+                
+                <div class="auth-footer">
+                    نسيت كلمة المرور؟ <a href="#" style="color: var(--primary);">إعادة تعيين</a>
+                </div>
+            </form>
+            
+            <form class="auth-form" id="registerForm">
+                <input type="text" placeholder="الاسم الكامل">
+                <input type="text" placeholder="البريد الإلكتروني">
+                <input type="text" placeholder="رقم الهاتف">
+                <input type="password" placeholder="كلمة المرور">
+                <input type="password" placeholder="تأكيد كلمة المرور">
+                <button type="button" onclick="register()">إنشاء حساب</button>
+                
+                <div class="social-auth">
+                    <div class="social-btn facebook"><i class="fab fa-facebook-f"></i></div>
+                    <div class="social-btn google"><i class="fab fa-google"></i></div>
+                    <div class="social-btn twitter"><i class="fab fa-twitter"></i></div>
+                </div>
+                
+                <div class="auth-footer">
+                    بإنشائك للحساب فإنك توافق على <a href="#" style="color: var(--primary);">شروط الخدمة</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- التطبيق الرئيسي -->
+    <div class="app-container" id="appContainer" style="display: none;">
+        <!-- الشريط الجانبي -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-dragon"></i>
+                    <h1>أنمي فوروم</h1>
+                </div>
+            </div>
+            
+            <div class="user-panel">
+                <div class="user-avatar">ن</div>
+                <div class="user-info">
+                    <div class="user-name">ناروتو أوزوماكي</div>
+                    <div class="user-handle">@Naruto7</div>
+                </div>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="#" class="active" onclick="showPage('home')">
+                        <i class="fas fa-home"></i>
+                        <span>الصفحة الرئيسية</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" onclick="showPage('profile')">
+                        <i class="fas fa-user"></i>
+                        <span>الملف الشخصي</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" onclick="showPage('groups')">
+                        <i class="fas fa-users"></i>
+                        <span>المجموعات</span>
+                        <span class="menu-badge">5</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" onclick="showPage('chat')">
+                        <i class="fas fa-comments"></i>
+                        <span>الرسائل</span>
+                        <span class="menu-badge">3</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" onclick="showPage('notifications')">
+                        <i class="fas fa-bell"></i>
+                        <span>الإشعارات</span>
+                        <span class="menu-badge">12</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <i class="fas fa-cog"></i>
+                        <span>الإعدادات</span>
+                    </a>
+                </li>
+                <li class="menu-item admin-only" style="display: none;">
+                    <a href="#" onclick="showPage('admin')">
+                        <i class="fas fa-tools"></i>
+                        <span>لوحة التحكم</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>تسجيل الخروج</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- المحتوى الرئيسي -->
+        <div class="main-content">
+            <div class="top-nav">
+                <div class="nav-title" id="pageTitle">الصفحة الرئيسية</div>
+                <div class="nav-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="ابحث في عالم الأنمي...">
+                    </div>
+                    <div class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">5</span>
+                    </div>
+                    <div class="menu-toggle" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-area">
+                <!-- الصفحة الرئيسية -->
+                <div class="page active" id="homePage">
+                    <!-- لوحة التحكم للمسؤول -->
+                    <div class="admin-panel" id="adminPanel">
+                        <h2>لوحة تحكم المسؤول</h2>
+                        <div class="admin-stats">
+                            <div class="stat-card">
+                                <i class="fas fa-users"></i>
+                                <div class="stat-value">1,254</div>
+                                <div class="stat-label">المستخدمين</div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-file-alt"></i>
+                                <div class="stat-value">5,678</div>
+                                <div class="stat-label">المنشورات</div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-comments"></i>
+                                <div class="stat-value">12,543</div>
+                                <div class="stat-label">التعليقات</div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-chart-line"></i>
+                                <div class="stat-value">+15%</div>
+                                <div class="stat-label">النشاط اليومي</div>
+                            </div>
+                        </div>
+                        <div class="admin-actions">
+                            <button class="admin-btn">إدارة المستخدمين</button>
+                            <button class="admin-btn">مراقبة المحتوى</button>
+                            <button class="admin-btn">الإحصائيات</button>
+                            <button class="admin-btn">الإعدادات</button>
+                        </div>
+                    </div>
+                    
+                    <!-- منطقة إنشاء منشور -->
+                    <div class="create-post">
+                        <div class="post-form">
+                            <div class="post-avatar">ن</div>
+                            <div class="post-input">
+                                <textarea placeholder="ما الجديد في عالم الأنمي؟"></textarea>
+                                <div class="post-actions">
+                                    <div class="post-options">
+                                        <div class="post-option"><i class="fas fa-image"></i> صورة</div>
+                                        <div class="post-option"><i class="fas fa-video"></i> فيديو</div>
+                                        <div class="post-option"><i class="fas fa-smile"></i> مشاعر</div>
+                                        <div class="post-option"><i class="fas fa-tag"></i> تاغ</div>
+                                    </div>
+                                    <button class="post-submit" onclick="createPost()">نشر</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- قائمة المنشورات -->
+                    <div class="posts" id="postsContainer">
+                        <!-- سيتم إضافة المنشورات ديناميكياً -->
+                    </div>
+                </div>
+                
+                <!-- صفحة الملف الشخصي -->
+                <div class="page" id="profilePage">
+                    <div class="profile-page">
+                        <div class="profile-header">
+                            <div class="profile-cover"></div>
+                            <div class="profile-info">
+                                <div class="profile-avatar">ن</div>
+                                <div class="profile-details">
+                                    <div class="profile-name">ناروتو أوزوماكي</div>
+                                    <div class="profile-handle">@Naruto7</div>
+                                    <div class="profile-bio">
+                                        محب للأنمي والألعاب. متابع لـ ون بيس، ناروتو، وأبطال الكوميديا. هكر سابق ومطور ويب.
+                                    </div>
+                                    <div class="profile-stats">
+                                        <div class="profile-stat">
+                                            <div class="stat-number">245</div>
+                                            <div class="stat-label">المنشورات</div>
+                                        </div>
+                                        <div class="profile-stat">
+                                            <div class="stat-number">1.2K</div>
+                                            <div class="stat-label">المتابعون</div>
+                                        </div>
+                                        <div class="profile-stat">
+                                            <div class="stat-number">567</div>
+                                            <div class="stat-label">يتابع</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="profile-actions">
+                                    <button class="profile-btn">تعديل الملف</button>
+                                    <button class="profile-btn">مشاركة</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="create-post">
+                            <div class="post-form">
+                                <div class="post-avatar">ن</div>
+                                <div class="post-input">
+                                    <textarea placeholder="اكتب منشوراً جديداً..."></textarea>
+                                    <div class="post-actions">
+                                        <div class="post-options">
+                                            <div class="post-option"><i class="fas fa-image"></i></div>
+                                            <div class="post-option"><i class="fas fa-video"></i></div>
+                                            <div class="post-option"><i class="fas fa-smile"></i></div>
+                                        </div>
+                                        <button class="post-submit">نشر</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="posts" id="profilePosts">
+                            <!-- منشورات الملف الشخصي -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- صفحة المجموعات -->
+                <div class="page" id="groupsPage">
+                    <div class="groups-page">
+                        <h2>المجموعات والمنتديات</h2>
+                        <div class="groups-grid">
+                            <!-- سيتم إضافة المجموعات ديناميكياً -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- صفحة الدردشة -->
+                <div class="page" id="chatPage">
+                    <div class="chat-page">
+                        <h2>الرسائل المباشرة</h2>
+                        <div class="chat-container">
+                            <div class="chat-sidebar">
+                                <div class="chat-list">
+                                    <!-- سيتم إضافة الدردشات ديناميكياً -->
+                                </div>
+                            </div>
+                            <div class="chat-main">
+                                <div class="chat-header">
+                                    <div class="chat-avatar">ل</div>
+                                    <div class="chat-info">
+                                        <div class="chat-name">لوفي مونكي</div>
+                                        <div class="chat-preview">متصل الآن</div>
+                                    </div>
+                                </div>
+                                <div class="chat-messages">
+                                    <!-- سيتم إضافة الرسائل ديناميكياً -->
+                                </div>
+                                <div class="chat-input">
+                                    <input type="text" placeholder="اكتب رسالة...">
+                                    <button class="chat-send"><i class="fas fa-paper-plane"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- صفحة الإشعارات -->
+                <div class="page" id="notificationsPage">
+                    <div class="notifications-page">
+                        <h2>الإشعارات</h2>
+                        <div class="posts">
+                            <!-- سيتم إضافة الإشعارات ديناميكياً -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- صفحة لوحة التحكم -->
+                <div class="page" id="adminPage">
+                    <div class="admin-dashboard">
+                        <h2>لوحة تحكم المسؤول</h2>
+                        <div class="admin-panel active">
+                            <!-- محتوى لوحة التحكم -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- الشريط الجانبي الأيمن -->
+        <div class="right-sidebar">
+            <div class="online-users">
+                <h3 class="section-title"><i class="fas fa-circle"></i> المستخدمون المتصلون</h3>
+                <div class="user-list">
+                    <!-- سيتم إضافة المستخدمين ديناميكياً -->
+                </div>
+            </div>
+            
+            <div class="trending-topics">
+                <h3 class="section-title"><i class="fas fa-hashtag"></i> المواضيع الشائعة</h3>
+                <div class="topic-list">
+                    <!-- سيتم إضافة المواضيع ديناميكياً -->
+                </div>
+            </div>
+            
+            <div class="anime-news">
+                <h3 class="section-title"><i class="fas fa-newspaper"></i> أخبار الأنمي</h3>
+                <div class="news-list">
+                    <!-- سيتم إضافة الأخبار ديناميكياً -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بيانات التطبيق
+        const appData = {
+            currentUser: null,
+            isAdmin: false,
+            currentPage: 'home',
+            posts: [
+                {
+                    id: 1,
+                    user: { name: 'لوفي مونكي', handle: '@LuffyKing', avatar: 'ل' },
+                    content: 'الحلقة الأخيرة من ون بيس كانت مذهلة! لا أستطيع الانتظار لمعرفة ما سيحدث بعد ذلك في أرض الواونو.',
+                    time: 'منذ 2 ساعة',
+                    likes: 324,
+                    comments: 142,
+                    shares: 56,
+                    tags: ['#ون_بيس', '#لوفي', '#أنمي'],
+                    hasImage: true
+                },
+                {
+                    id: 2,
+                    user: { name: 'إيرين ييغر', handle: '@ErenYeager', avatar: 'إ' },
+                    content: 'نهاية هجوم العمالقة تركتني في حالة صدمة! ما رأيكم في الخيارات التي اتخذها إيرين؟ هل كان هناك بديل؟',
+                    time: 'منذ 5 ساعة',
+                    likes: 512,
+                    comments: 287,
+                    shares: 134,
+                    tags: ['#هجوم_العمالقة', '#إيرين_ييغر', '#نهاية'],
+                    hasImage: false
+                }
+            ],
+            users: [
+                { name: 'هيناتا هيوغا', handle: '@Hinata', avatar: 'ه', online: true },
+                { name: 'زورو', handle: '@Zoro', avatar: 'ز', online: true },
+                { name: 'ميكاسا أكرمان', handle: '@Mikasa', avatar: 'م', online: true },
+                { name: 'غون', handle: '@Gon', avatar: 'غ', online: false },
+                { name: 'كيلوا', handle: '@Killua', avatar: 'ك', online: true }
+            ],
+            trends: [
+                { name: 'هجوم_العمالقة', count: '15.2K' },
+                { name: 'ون_بيس', count: '12.8K' },
+                { name: 'ناروتو', count: '10.5K' },
+                { name: 'أبطال_الكوميديا', count: '8.7K' }
+            ],
+            news: [
+                { title: 'الموسم الجديد من Attack on Titan يصل إلى منصة كرانشي رول', date: 'منذ 3 أيام' },
+                { title: 'فيلم Demon Slayer: Mugen Train يحطم الأرقام القياسية', date: 'منذ 5 أيام' },
+                { title: 'إعلان عن أنمي جديد لـ "Chainsaw Man" في 2023', date: 'منذ أسبوع' }
+            ],
+            groups: [
+                { name: 'نادي ون بيس', description: 'لمناقشة أحدث حلقات ون بيس وتوقعات القصة', members: 1250 },
+                { name: 'مجتمع هجوم العمالقة', description: 'تحليل ونقاش حول أحدث تطورات القصة', members: 980 },
+                { name: 'عشاق ناروتو', description: 'لمحبي ناروتو و بوروتو وأحداث العالم الشينوبي', members: 750 }
+            ]
+        };
+
+        // وظائف التطبيق
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            document.querySelector(`.auth-tab:${tab === 'login' ? 'first-child' : 'last-child'}`).classList.add('active');
+            document.getElementById(`${tab}Form`).classList.add('active');
+        }
+
+        function login() {
+            // محاكاة تسجيل الدخول
+            appData.currentUser = { name: 'ناروتو أوزوماكي', handle: '@Naruto7', avatar: 'ن' };
+            appData.isAdmin = true; // جعل المستخدم مسؤول للاختبار
+            
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'flex';
+            
+            // إظهار لوحة التحكم إذا كان المستخدم مسؤول
+            if (appData.isAdmin) {
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+                document.getElementById('adminPanel').style.display = 'block';
+            }
+            
+            loadHomePage();
+        }
+
+        function register() {
+            // محاكاة التسجيل
+            alert('تم إنشاء الحساب بنجاح! يمكنك تسجيل الدخول الآن.');
+            switchAuthTab('login');
+        }
+
+        function logout() {
+            appData.currentUser = null;
+            document.getElementById('appContainer').style.display = 'none';
+            document.getElementById('authContainer').style.display = 'flex';
+        }
+
+        function showPage(pageName) {
+            // إخفاء جميع الصفحات
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.menu-item a').forEach(link => link.classList.remove('active'));
+            
+            // إظهار الصفحة المطلوبة
+            document.getElementById(`${pageName}Page`).classList.add('active');
+            
+            // تحديث العنوان
+            const titles = {
+                'home': 'الصفحة الرئيسية',
+                'profile': 'الملف الشخصي',
+                'groups': 'المجموعات',
+                'chat': 'الرسائل',
+                'notifications': 'الإشعارات',
+                'admin': 'لوحة التحكم'
+            };
+            document.getElementById('pageTitle').textContent = titles[pageName];
+            
+            // تمييز العنصر النشط في القائمة
+            document.querySelector(`a[onclick="showPage('${pageName}')"]`).classList.add('active');
+            
+            // تحميل محتوى الصفحة
+            if (pageName === 'home') loadHomePage();
+            else if (pageName === 'profile') loadProfilePage();
+            else if (pageName === 'groups') loadGroupsPage();
+            else if (pageName === 'chat') loadChatPage();
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        function createPost() {
+            const textarea = document.querySelector('.post-input textarea');
+            const content = textarea.value.trim();
+            
+            if (content) {
+                const newPost = {
+                    id: appData.posts.length + 1,
+                    user: appData.currentUser,
+                    content: content,
+                    time: 'الآن',
+                    likes: 0,
+                    comments: 0,
+                    shares: 0,
+                    tags: ['#أنمي', '#منشور_جديد'],
+                    hasImage: false
+                };
+                
+                appData.posts.unshift(newPost);
+                textarea.value = '';
+                loadHomePage();
+                alert('تم نشر منشورك بنجاح!');
+            } else {
+                alert('يرجى كتابة محتوى للمنشور أولاً');
+            }
+        }
+
+        function loadHomePage() {
+            const container = document.getElementById('postsContainer');
+            container.innerHTML = '';
+            
+            appData.posts.forEach(post => {
+                const postEl = document.createElement('div');
+                postEl.className = 'post';
+                postEl.innerHTML = `
+                    <div class="post-header">
+                        <div class="post-user-avatar">${post.user.avatar}</div>
+                        <div class="post-user-info">
+                            <div class="post-user-name">${post.user.name}</div>
+                            <div class="post-user-handle">${post.user.handle}</div>
+                        </div>
+                        <div class="post-time">${post.time}</div>
+                    </div>
+                    <div class="post-content">${post.content}</div>
+                    ${post.hasImage ? '<div class="post-media"><i class="fas fa-image"></i> صورة من الحلقة</div>' : ''}
+                    <div class="post-tags">
+                        ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    <div class="post-stats">
+                        <span>${post.likes} إعجاب</span>
+                        <span>${post.comments} تعليق</span>
+                        <span>${post.shares} مشاركة</span>
+                    </div>
+                    <div class="post-actions-bar">
+                        <div class="post-action" onclick="likePost(${post.id})">
+                            <i class="far fa-heart"></i>
+                            <span>إعجاب</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="far fa-comment"></i>
+                            <span>تعليق</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-retweet"></i>
+                            <span>مشاركة</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="far fa-bookmark"></i>
+                            <span>حفظ</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(postEl);
+            });
+            
+            // تحميل المستخدمين المتصلين
+            const userList = document.querySelector('.user-list');
+            userList.innerHTML = '';
+            appData.users.forEach(user => {
+                const userEl = document.createElement('div');
+                userEl.className = 'online-user';
+                userEl.innerHTML = `
+                    <div class="online-user-avatar">${user.avatar}</div>
+                    <div class="online-user-name">${user.name}</div>
+                    ${user.online ? '<div class="online-indicator"></div>' : ''}
+                `;
+                userList.appendChild(userEl);
+            });
+            
+            // تحميل المواضيع الشائعة
+            const topicList = document.querySelector('.topic-list');
+            topicList.innerHTML = '';
+            appData.trends.forEach(trend => {
+                const trendEl = document.createElement('div');
+                trendEl.className = 'topic';
+                trendEl.innerHTML = `
+                    <div class="topic-name">#${trend.name}</div>
+                    <div class="topic-count">${trend.count} منشور</div>
+                `;
+                topicList.appendChild(trendEl);
+            });
+            
+            // تحميل أخبار الأنمي
+            const newsList = document.querySelector('.news-list');
+            newsList.innerHTML = '';
+            appData.news.forEach(news => {
+                const newsEl = document.createElement('div');
+                newsEl.className = 'news-item';
+                newsEl.innerHTML = `
+                    <div class="news-title">${news.title}</div>
+                    <div class="news-date">${news.date}</div>
+                `;
+                newsList.appendChild(newsEl);
+            });
+        }
+
+        function likePost(postId) {
+            const post = appData.posts.find(p => p.id === postId);
+            if (post) {
+                post.likes++;
+                loadHomePage();
+            }
+        }
+
+        function loadProfilePage() {
+            // سيتم تنفيذها لاحقاً
+        }
+
+        function loadGroupsPage() {
+            const container = document.querySelector('.groups-grid');
+            container.innerHTML = '';
+            
+            appData.groups.forEach(group => {
+                const groupEl = document.createElement('div');
+                groupEl.className = 'group-card';
+                groupEl.innerHTML = `
+                    <div class="group-cover"></div>
+                    <div class="group-info">
+                        <div class="group-name">${group.name}</div>
+                        <div class="group-description">${group.description}</div>
+                        <div class="group-members">
+                            <div class="member-avatar">+${Math.min(group.members, 99)}</div>
+                            <div class="member-count">${group.members} عضو</div>
+                        </div>
+                        <button class="group-join">انضم إلى المجموعة</button>
+                    </div>
+                `;
+                container.appendChild(groupEl);
+            });
+        }
+
+        function loadChatPage() {
+            // سيتم تنفيذها لاحقاً
+        }
+
+        // تحميل التطبيق عند البدء
+        document.addEventListener('DOMContentLoaded', function() {
+            // يمكن إضافة أي تهيئة إضافية هنا
+        });
+    </script>
+</body>
+</html>
